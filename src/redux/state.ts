@@ -1,6 +1,3 @@
-// типизация state:
-import {renderThree} from '../render';
-
 export type PostType = {
     id: number,
     message: string
@@ -57,17 +54,25 @@ export let state: RootStateType = {
     }
 }
 // функция добавления постов -  её прокинем в UI колбеком чтобы при добавлении поста UI передал нам текст того что написал:
-export let addPost = () => {
+export const addPost = () => {
     let newPost = {id: 5, message: state.profilePage.newPostText, likeCount: 0}
     state.profilePage.posts.push(newPost)
     state.profilePage.newPostText = ''
-    renderThree(state)
+    rerenderThree(state)
 }
 //обновить пост:
-export let updateNewPostText = (newText: string) => {
+export const updateNewPostText = (newText: string) => {
     //приходит текст из пропсов и мы перерисовываем компоненту:
     state.profilePage.newPostText = newText
-    renderThree(state)
+    rerenderThree(state)
+}
+
+export  const subscriber = (observer: any) => {
+    rerenderThree = observer // наблюдатель "observer" - паттерн кто-то наблюдает за объектом потом уведомляет что что-то произошло
+}
+//заглушка функция используется чтобы цикличности не было:
+let rerenderThree = ( state: RootStateType) => {
+    console.log('State changed')
 }
 
 
