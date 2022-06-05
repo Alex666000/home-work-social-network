@@ -1,4 +1,6 @@
 // типизация state:
+import {renderThree} from '../render';
+
 export type PostType = {
     id: number,
     message: string
@@ -14,6 +16,7 @@ export type MessageType = {
 }
 export type ProfilePageType = {
     posts: Array<PostType>
+    newPostText: string
 }
 export type DialogsPageType = {
     dialogs: Array<DialogType>
@@ -24,6 +27,7 @@ export type RootStateType = {
     profilePage: ProfilePageType
     dialogsPage: DialogsPageType
 }
+
 // state:
 export let state: RootStateType = {
     //ветки profilePage и dialogsPage - отдельный под]объект для каждой страничке...
@@ -32,6 +36,7 @@ export let state: RootStateType = {
             {id: 1, message: 'Hello', likeCount: 12},
             {id: 2, message: 'How are you?', likeCount: 10}
         ],
+        newPostText: 'My name is Aleksandr'
     },
     dialogsPage: {
         dialogs: [
@@ -52,10 +57,17 @@ export let state: RootStateType = {
     }
 }
 // функция добавления постов -  её прокинем в UI колбеком чтобы при добавлении поста UI передал нам текст того что написал:
-export let addPost = (newPostMessage: string) => {
-    debugger
-    let newPost = {id: 5, message: newPostMessage, likeCount: 0}
+export let addPost = () => {
+    let newPost = {id: 5, message: state.profilePage.newPostText, likeCount: 0}
     state.profilePage.posts.push(newPost)
+    state.profilePage.newPostText = ''
+    renderThree(state)
+}
+//обновить пост:
+export let updateNewPostText = (newText: string) => {
+    //приходит текст из пропсов и мы перерисовываем компоненту:
+    state.profilePage.newPostText = newText
+    renderThree(state)
 }
 
 
