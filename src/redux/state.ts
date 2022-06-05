@@ -20,60 +20,67 @@ export type DialogsPageType = {
     messages: Array<MessageType>
 }
 
-export type RootStateType = {
+export type StateType = {
     profilePage: ProfilePageType
     dialogsPage: DialogsPageType
 }
-
-// state:
-export let state: RootStateType = {
-    //ветки profilePage и dialogsPage - отдельный под]объект для каждой страничке...
-    profilePage: {
-        posts: [
-            {id: 1, message: 'Hello', likeCount: 12},
-            {id: 2, message: 'How are you?', likeCount: 10}
-        ],
-        newPostText: 'My name is Aleksandr'
+export type RootStoreType = {
+    _state: StateType
+    _rerenderThree: (val: string | any) => void
+    addPost: (newPost: string) => void
+    updateNewPostText: (newText: string) => void
+    subscriber: (observer: Function | any) => void
+}
+// store - объект по принципам ООП а не разбросаны файлы как у state:
+export let store: RootStoreType = {
+    _state: {
+        profilePage: {
+            posts: [
+                {id: 1, message: 'Hello', likeCount: 12},
+                {id: 2, message: 'How are you?', likeCount: 10}
+            ],
+            newPostText: 'My name is Aleksandr'
+        },
+        dialogsPage: {
+            dialogs: [
+                {id: 1, name: 'Margarita'},
+                {id: 2, name: 'Andrey'},
+                {id: 3, name: 'Svetlana'},
+                {id: 4, name: 'Sasha'},
+                {id: 5, name: 'Valera'},
+                {id: 6, name: 'Victor'},
+            ],
+            messages: [
+                {id: 1, message: 'Hello'},
+                {id: 2, message: 'How are you?'},
+                {id: 3, message: 'What is your name'},
+                {id: 4, message: 'My name is....'},
+                {id: 5, message: 'Let\'s go'},
+            ]
+        }
     },
-    dialogsPage: {
-        dialogs: [
-            {id: 1, name: 'Margarita'},
-            {id: 2, name: 'Andrey'},
-            {id: 3, name: 'Svetlana'},
-            {id: 4, name: 'Sasha'},
-            {id: 5, name: 'Valera'},
-            {id: 6, name: 'Victor'},
-        ],
-        messages: [
-            {id: 1, message: 'Hello'},
-            {id: 2, message: 'How are you?'},
-            {id: 3, message: 'What is your name'},
-            {id: 4, message: 'My name is....'},
-            {id: 5, message: 'Let\'s go'},
-        ]
+    _rerenderThree(val: string) {
+        console.log('Hello friends')
+    },
+    addPost() {
+        let newPost = {id: 5, message: this._state.profilePage.newPostText, likeCount: 0}
+        this._state.profilePage.posts.push(newPost)
+        this._state.profilePage.newPostText = ''
+        this._rerenderThree(this._state)
+    },
+    updateNewPostText(newText: string) {
+        this._state.profilePage.newPostText = newText
+        this._rerenderThree(this._state)
+    },
+    subscriber(observer: Function | any) {
+        this._rerenderThree = observer // наблюдатель "observer" - паттерн кто-то наблюдает за объектом потом уведомляет что что-то произошло
     }
 }
-// функция добавления постов -  её прокинем в UI колбеком чтобы при добавлении поста UI передал нам текст того что написал:
-export const addPost = () => {
-    let newPost = {id: 5, message: state.profilePage.newPostText, likeCount: 0}
-    state.profilePage.posts.push(newPost)
-    state.profilePage.newPostText = ''
-    rerenderThree(state)
-}
-//обновить пост:
-export const updateNewPostText = (newText: string) => {
-    //приходит текст из пропсов и мы перерисовываем компоненту:
-    state.profilePage.newPostText = newText
-    rerenderThree(state)
-}
+// window.store = store
 
-export  const subscriber = (observer: any) => {
-    rerenderThree = observer // наблюдатель "observer" - паттерн кто-то наблюдает за объектом потом уведомляет что что-то произошло
-}
-//заглушка функция используется чтобы цикличности не было:
-let rerenderThree = ( state: RootStateType) => {
-    console.log('State changed')
-}
+
+
+
 
 
 
