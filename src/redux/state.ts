@@ -51,6 +51,12 @@ export let state: RootStateType = {
         ]
     }
 }
+// функция добавления постов -  её прокинем в UI колбеком чтобы при добавлении поста UI передал нам текст того что написал:
+export let addPost = (newPostMessage: string) => {
+    debugger
+    let newPost = {id: 5, message: newPostMessage, likeCount: 0}
+    state.profilePage.posts.push(newPost)
+}
 
 
 
