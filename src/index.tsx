@@ -2,17 +2,17 @@ import React from 'react';
 import './index.css';
 import ReactDOM from 'react-dom';
 import App from './App';
-import {RootStoreType, store} from './redux/state';
+import {RootStoreType, StateType, store} from './redux/state';
 
-let rerenderThree = (store: RootStoreType) => {
+
+let rerenderThree = (state: StateType) => {
     ReactDOM.render(
         <App
-        store={store._state}
-        addPost={store.addPost}
-        updateNewPostText={store.updateNewPostText}
-    />, document.getElementById('root'));
+            state={state}
+            dispatch={store.dispatch.bind(store)}
+        />, document.getElementById('root'));
 }
 
-rerenderThree(store)
+rerenderThree(store.getState())
 
 store.subscriber(rerenderThree)

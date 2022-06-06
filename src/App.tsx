@@ -5,12 +5,11 @@ import {Navbar} from './components/Navbar/Navbar';
 import {Dialogs} from './components/Dialogs/Dialogs';
 import {BrowserRouter, Route} from 'react-router-dom';
 import {Profile} from './components/Profile/Profile';
-import {RootStateType, updateNewPostText} from './redux/state';
+import {ActionType, StateType} from './redux/state';
 
 type AppPropsType = {
-    state: RootStateType
-    addPost: () => void
-    updateNewPostText: (newText: string) => void
+    state: StateType
+    dispatch: (action: ActionType) => void | any
 }
 
 const App: React.FC<AppPropsType> = (props) => {
@@ -31,10 +30,7 @@ const App: React.FC<AppPropsType> = (props) => {
                         path={'/profile'}
                         render={() => <Profile
                             profilePage={props.state.profilePage}
-                            addPost={props.addPost}
-                            updateNewPostText={props.updateNewPostText}
-
-
+                            dispatch={props.dispatch}
                         />}/>
                 </div>
             </div>

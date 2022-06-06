@@ -19,18 +19,24 @@ export type DialogsPageType = {
     dialogs: Array<DialogType>
     messages: Array<MessageType>
 }
-
+//типизация state:
 export type StateType = {
     profilePage: ProfilePageType
     dialogsPage: DialogsPageType
 }
+//типизация store:
 export type RootStoreType = {
     _state: StateType
-    _rerenderThree: (val: string | any) => void
-    addPost: (newPost: string) => void
-    updateNewPostText: (newText: string) => void
+    getState: () => any //что возвращает???
+    _callSubscriber: (val: string | any) => void
+    dispatch: (action: ActionType) => void | any
     subscriber: (observer: Function | any) => void
 }
+export type ActionType = {
+    type: string
+    newText: string
+}
+
 // store - объект по принципам ООП а не разбросаны файлы как у state:
 export let store: RootStoreType = {
     _state: {
@@ -59,24 +65,34 @@ export let store: RootStoreType = {
             ]
         }
     },
-    _rerenderThree(val: string) {
+    _callSubscriber(val: string | any) {
         console.log('Hello friends')
     },
-    addPost() {
-        let newPost = {id: 5, message: this._state.profilePage.newPostText, likeCount: 0}
-        this._state.profilePage.posts.push(newPost)
-        this._state.profilePage.newPostText = ''
-        this._rerenderThree(this._state)
-    },
-    updateNewPostText(newText: string) {
-        this._state.profilePage.newPostText = newText
-        this._rerenderThree(this._state)
+
+    getState() {
+        return this._state
     },
     subscriber(observer: Function | any) {
-        this._rerenderThree = observer // наблюдатель "observer" - паттерн кто-то наблюдает за объектом потом уведомляет что что-то произошло
+        this._callSubscriber = observer // наблюдатель "observer" - паттерн кто-то наблюдает за объектом потом уведомляет что что-то произошло
+    },
+
+    dispatch(action: ActionType) {
+        if (action.type === 'ADD-POST') {
+            let newPost = {
+                id: 5,
+                message: this._state.profilePage.newPostText,
+                likeCount: 0
+            }
+            this._state.profilePage.posts.push(newPost)
+            this._state.profilePage.newPostText = ''
+            this._callSubscriber(this._state)
+        } else if (action.type === 'UPDATE-NEW-POST-TEXT') {
+            this._state.profilePage.newPostText = action.newText
+            this._callSubscriber(this._state)
+        }
     }
 }
-// window.store = store
+
 
 
 
