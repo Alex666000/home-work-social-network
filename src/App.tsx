@@ -9,7 +9,7 @@ import {ActionType, StateType} from './redux/state';
 
 type AppPropsType = {
     state: StateType
-    dispatch: (action: ActionType) => void | any
+    dispatch: (action: ActionType) => void
 }
 
 const App: React.FC<AppPropsType> = (props) => {

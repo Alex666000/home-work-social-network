@@ -2,12 +2,13 @@ import React from 'react';
 import s from './MyPosts.module.css'
 import {Post} from './Post/Post';
 import {ActionType, PostType} from '../../../redux/state';
+import {AnyAction} from 'redux';
 
 type MyPostsPropsType = {
     posts: Array<PostType>
-    dispatch: (action: ActionType) => void | any
+    dispatch: (action: AnyAction) => void
     newPostText: string
-    type: string
+
 }
 
 export const MyPosts: React.FC<MyPostsPropsType> = (props) => {
@@ -16,7 +17,8 @@ export const MyPosts: React.FC<MyPostsPropsType> = (props) => {
 //локальный колбек addPost
     let addPost = () => {
         // props.addPost()
-        props.dispatch({type: 'ADD-POST'})
+        let action = {type: 'ADD-POST'};
+        props.dispatch(action)
     }
 
     let onPostChange = () => {
@@ -32,7 +34,7 @@ export const MyPosts: React.FC<MyPostsPropsType> = (props) => {
         <div className={s.postBlock}>
             <h3>My post</h3>
             <div>
-                <textarea ref={newPostElement} value={props.newPostText} onChange={onPostChange}></textarea>
+                <textarea ref={props.newPostText} value={newPostElement} onChange={onPostChange}></textarea>
                 <button onClick={addPost} className={s.addPost}>Add post
                 </button>
             </div>

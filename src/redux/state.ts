@@ -28,8 +28,8 @@ export type StateType = {
 export type RootStoreType = {
     _state: StateType
     getState: () => any //что возвращает???
-    _callSubscriber: (val: string | any) => void
-    dispatch: (action: ActionType) => void | any
+    _callSubscriber: (state: StateType) => void
+    dispatch: (action: ActionType) => void
     subscriber: (observer: Function | any) => void
 }
 export type ActionType = {
@@ -65,14 +65,14 @@ export let store: RootStoreType = {
             ]
         }
     },
-    _callSubscriber(val: string | any) {
+    _callSubscriber(state) {
         console.log('Hello friends')
     },
 
     getState() {
         return this._state
     },
-    subscriber(observer: Function | any) {
+    subscriber(observer) {
         this._callSubscriber = observer // наблюдатель "observer" - паттерн кто-то наблюдает за объектом потом уведомляет что что-то произошло
     },
 
