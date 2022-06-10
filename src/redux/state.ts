@@ -36,6 +36,9 @@ export type ActionType = {
     type: string
     newText: string
 }
+// Переменные для "экшнов":
+const ADD_POST = 'ADD-POST';
+const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
 
 // store - объект по принципам ООП а не разбросаны файлы как у state:
 export let store: RootStoreType = {
@@ -75,9 +78,9 @@ export let store: RootStoreType = {
     subscriber(observer) {
         this._callSubscriber = observer // наблюдатель "observer" - паттерн кто-то наблюдает за объектом потом уведомляет что что-то произошло
     },
-
+// dispatch:
     dispatch(action: ActionType) {
-        if (action.type === 'ADD-POST') {
+        if (action.type === ADD_POST) {
             let newPost = {
                 id: 5,
                 message: this._state.profilePage.newPostText,
@@ -86,13 +89,17 @@ export let store: RootStoreType = {
             this._state.profilePage.posts.push(newPost)
             this._state.profilePage.newPostText = ''
             this._callSubscriber(this._state)
-        } else if (action.type === 'UPDATE-NEW-POST-TEXT') {
+        } else if (action.type === UPDATE_NEW_POST_TEXT) {
             this._state.profilePage.newPostText = action.newText
             this._callSubscriber(this._state)
         }
     }
 }
 
+// ActionCreator:
+ export const addPostActionCreator = () => ({type: ADD_POST})
+// ActionCreator:
+export const updateNewPostTextActionCreator = (text: string) => ({type: UPDATE_NEW_POST_TEXT, newText: text})
 
 
 
